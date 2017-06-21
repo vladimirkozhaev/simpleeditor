@@ -4,11 +4,12 @@
  <extension
          point="org.eclipse.ui.editors">
       <editor
-      name="Minimal Editor"
-      extensions="min"
-      icon="icons/sample.gif"
-      class="org.newlanguageservice.editor.MinimalEditor"
-      id="org.eclipse.faq.examples.editor.MinimalEditor">
+            class="org.newlanguageservice.editor.MinimalEditor"
+            contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
+            extensions="min"
+            icon="icons/sample.gif"
+            id="org.eclipse.faq.examples.editor.MinimalEditor"
+            name="Minimal Editor">
    </editor>
    </extension>
 
