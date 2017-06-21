@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+ <extension
+         point="org.eclipse.ui.editors">
+      <editor
+      name="Minimal Editor"
+      extensions="min"
+      icon="icons/sample.gif"
+      class="org.newlanguageservice.editor.MinimalEditor"
+      id="org.eclipse.faq.examples.editor.MinimalEditor">
+   </editor>
+   </extension>
+
+</plugin>
