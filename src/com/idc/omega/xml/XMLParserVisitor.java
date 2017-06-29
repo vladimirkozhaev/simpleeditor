@@ -34,7 +34,7 @@ public class XMLParserVisitor extends XMLParserBaseVisitor<XMLNodeInfo> {
 			return null;
 		}
 		String text = pCtx.getText();
-		System.out.println(">>"+text);
+		
 		String pNodeName = pCtx.elementName == null ? " " : pCtx.elementName.getText();
 		XMLNodeInfo parentNode = new XMLNodeInfo(pNodeName, pCtx.getStart().getStartIndex(), text.length());
 		pCtx.attribute().forEach(attr -> parentNode.getProperties().put(attr.attrName.getText(),

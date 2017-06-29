@@ -28,7 +28,7 @@ public class MinimalEditor extends TextEditor {
 
 	private ProjectionSupport projectionSupport;
 	private ProjectionAnnotationModel annotationModel;
-	private Annotation[] oldAnnotations;
+	private Annotation[] oldAnnotations=new Annotation[0];
 
 	@Override
 	public void createPartControl(Composite parent) {
@@ -68,13 +68,11 @@ public class MinimalEditor extends TextEditor {
 
 			newAnnotations.put(annotation, positions.get(i));
 
-			annotations[i] = annotation;
+			annotations[i]=annotation;
 		}
 
-		annotationModel.removeAllAnnotations();
-		newAnnotations.entrySet().forEach(entry -> {
-			annotationModel.addAnnotation(entry.getKey(), entry.getValue());
-		});
+		annotationModel.replaceAnnotations(oldAnnotations, newAnnotations);
+
 
 		oldAnnotations = annotations;
 	}
