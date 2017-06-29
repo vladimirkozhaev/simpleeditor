@@ -50,7 +50,10 @@ public class XMLNodeInfo {
 
 	@Override
 	public String toString() {
-		return "XMLNodeInfo [mNodeName=" + mNodeName + ", mOffset=" + mOffset + ", mLenght=" + mLenght + "]";
+		return "XMLNodeInfo [mNodeName=" + mNodeName + ", mOffset=" + mOffset + ", mLenght=" + mLenght + ", mChildren="
+				+ mChildren + ", mProperties=" + mProperties + "]";
 	}
+
+	
 	
 }

@@ -12,6 +12,9 @@ import org.eclipse.jface.text.reconciler.IReconcilingStrategy;
 import org.eclipse.jface.text.reconciler.IReconcilingStrategyExtension;
 import org.eclipse.swt.widgets.Display;
 
+import com.idc.omega.xml.XMLNodeInfo;
+import com.idc.omega.xml.XMLParserVisitor;
+
 public class SimpleReconciclingStrategy implements IReconcilingStrategy, IReconcilingStrategyExtension {
 	private MinimalEditor editor;
 
@@ -33,35 +36,35 @@ public class SimpleReconciclingStrategy implements IReconcilingStrategy, IReconc
 	}
 
 	private void calculatePositions() {
+		fPositions.clear();
 		String string = fDocument.get();
-		String[] split = string.split("");
-		int pos = 0;
-		while (pos < split.length) {
-			while (pos < split.length && isSpaceChar(split, pos)) {
-				pos++;
-			}
+		try {
+			XMLNodeInfo makeNodesInfo = XMLParserVisitor.makeNodesInfo(string);
+			System.out.println(makeNodesInfo);
+			fillPositions(fPositions, makeNodesInfo);
 
-			int posStart = pos;
+			Display.getDefault().asyncExec(new Runnable() {
+				public void run() {
+					editor.updateFoldingStructure(fPositions);
+				}
 
-			while (pos < split.length && !isSpaceChar(split, pos)) {
-				pos++;
-			}
-
-			int posEnd = pos;
-			Position position = new Position(pos, posEnd - posStart);
-			fPositions.add(position);
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
-		 Display.getDefault().asyncExec(new Runnable() {
-             public void run() {
-                     editor.updateFoldingStructure(fPositions);
-             }
-
-     });
 	}
 
-	private boolean isSpaceChar(String[] split, int pos) {
-		return split[pos].equals("\n") || split[pos].equals("\r") || split[pos].equals(" ") || split[pos].equals("\t");
+	private void fillPositions(List<Position> fPositions, XMLNodeInfo makeNodesInfo) {
+		if (makeNodesInfo == null) {
+			return;
+		}
+		int offset = makeNodesInfo.getOffset();
+		int lenght = makeNodesInfo.getLenght();
+		Position position = new Position(offset, lenght);
+		fPositions.add(position);
+		makeNodesInfo.getChildren().forEach(child -> fillPositions(fPositions, child));
+
 	}
 
 	@Override

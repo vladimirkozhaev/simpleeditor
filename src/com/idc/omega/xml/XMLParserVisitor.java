@@ -2,15 +2,18 @@ package com.idc.omega.xml;
 
 import java.util.List;
 
+import org.antlr.v4.runtime.ANTLRErrorListener;
 import org.antlr.v4.runtime.ANTLRInputStream;
+import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
 import org.newlanguageservice.antlr.XMLLexer;
 import org.newlanguageservice.antlr.XMLParser;
 import org.newlanguageservice.antlr.XMLParser.ContentSequenceContext;
 import org.newlanguageservice.antlr.XMLParser.DocumentContext;
 import org.newlanguageservice.antlr.XMLParser.ElementContext;
 import org.newlanguageservice.antlr.XMLParserBaseVisitor;
-
 
 /**
  * 
@@ -27,7 +30,9 @@ public class XMLParserVisitor extends XMLParserBaseVisitor<XMLNodeInfo> {
 
 	@Override
 	public XMLNodeInfo visitElement(ElementContext pCtx) {
-
+		if (pCtx == null) {
+			return null;
+		}
 		String pNodeName = pCtx.elementName == null ? " " : pCtx.elementName.getText();
 		XMLNodeInfo parentNode = new XMLNodeInfo(pNodeName, pCtx.getStart().getStartIndex(), pNodeName.length());
 		pCtx.attribute().forEach(attr -> parentNode.getProperties().put(attr.attrName.getText(),
@@ -45,14 +50,15 @@ public class XMLParserVisitor extends XMLParserBaseVisitor<XMLNodeInfo> {
 		return parentNode;
 	}
 
-	public static XMLNodeInfo makeNodesInfo(String pStr) {
+	public static XMLNodeInfo makeNodesInfo(String pStr) throws Exception {
 		XMLLexer lexer = new XMLLexer(new ANTLRInputStream(pStr));
 		CommonTokenStream tokens = new CommonTokenStream(lexer);
 		XMLParser parser = new XMLParser(tokens);
-		//parser.getInterpreter().setPredictionMode(PredictionMode.LL_EXACT_AMBIG_DETECTION);
+
 		DocumentContext tree = parser.document();
 		XMLParserVisitor eval = new XMLParserVisitor();
 		XMLNodeInfo info = eval.visitElement(tree.elem);
 		return info;
+
 	}
 }
