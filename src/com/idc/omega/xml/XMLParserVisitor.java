@@ -33,8 +33,10 @@ public class XMLParserVisitor extends XMLParserBaseVisitor<XMLNodeInfo> {
 		if (pCtx == null) {
 			return null;
 		}
+		String text = pCtx.getText();
+		System.out.println(">>"+text);
 		String pNodeName = pCtx.elementName == null ? " " : pCtx.elementName.getText();
-		XMLNodeInfo parentNode = new XMLNodeInfo(pNodeName, pCtx.getStart().getStartIndex(), pNodeName.length());
+		XMLNodeInfo parentNode = new XMLNodeInfo(pNodeName, pCtx.getStart().getStartIndex(), text.length());
 		pCtx.attribute().forEach(attr -> parentNode.getProperties().put(attr.attrName.getText(),
 				attr.attrValue.getText().substring(1, attr.attrValue.getText().length() - 1)));
 		if (pCtx.cont != null) {
