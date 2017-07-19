@@ -22,8 +22,7 @@ public class MinimalEditor extends TextEditor {
 	 */
 	public MinimalEditor() {
 		super();
-		setSourceViewerConfiguration(new SimpleConfiguration(this));
-		setDocumentProvider(new MinimalDocumentProvider());
+		setSourceViewerConfiguration(new SimpleConfiguration(this));		
 	}
 
 	private ProjectionSupport projectionSupport;
