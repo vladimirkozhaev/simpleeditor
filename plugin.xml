@@ -4,8 +4,8 @@
  <extension
          point="org.eclipse.ui.editors">
       <editor
-            class="org.newlanguageservice.editor.MinimalEditor"
-            contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
+            class="org.newlanguageservice.editor.MultiPageEditor"
+            contributorClass="org.newlanguageservice.editor.MultiPageEditorContributor"
             extensions="min"
             icon="icons/sample.gif"
             id="org.eclipse.faq.examples.editor.MinimalEditor"
@@ -13,4 +13,5 @@
    </editor>
    </extension>
 
+	
 </plugin>

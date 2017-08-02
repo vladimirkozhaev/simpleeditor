@@ -39,9 +39,19 @@ public class SimpleReconciclingStrategy implements IReconcilingStrategy, IReconc
 		fPositions.clear();
 		String string = fDocument.get();
 		try {
-			XMLNodeInfo makeNodesInfo = XMLParserVisitor.makeNodesInfo(string);
-			System.out.println(makeNodesInfo);
-			fillPositions(fPositions, makeNodesInfo);
+
+			while (string.length() > 0) {
+				int startIndex = string.indexOf("XML>>");
+				int endIndex = string.indexOf("<<XML");
+
+				if (!(startIndex >= 0 && endIndex > 0))
+					break;
+				String substring = string.substring(startIndex + "XML>>".length(), endIndex);
+				XMLNodeInfo makeNodesInfo = XMLParserVisitor.makeNodesInfo(substring);
+				fillPositions(fPositions, makeNodesInfo);
+				string = string.substring(endIndex + "<<XML".length());
+
+			}
 
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {
