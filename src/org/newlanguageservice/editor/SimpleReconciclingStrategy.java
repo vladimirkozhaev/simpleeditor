@@ -36,12 +36,11 @@ public class SimpleReconciclingStrategy implements IReconcilingStrategy, IReconc
 	}
 
 	private void calculatePositions() {
-		fPositions.clear();
-		String string = fDocument.get();
+	
 		try {
 
-			XMLNodeInfo makeNodesInfo = XMLParserVisitor.makeNodesInfo(string);
-			fillPositions(fPositions, makeNodesInfo);
+			
+			fillPositions(fPositions, editor.getNodeInfo());
 
 			Display.getDefault().asyncExec(new Runnable() {
 				public void run() {

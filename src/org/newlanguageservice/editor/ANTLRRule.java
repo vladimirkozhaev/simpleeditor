@@ -20,7 +20,6 @@ public class ANTLRRule implements IPredicateRule {
 
 	@Override
 	public IToken evaluate(ICharacterScanner scanner) {
-		// TODO Auto-generated method stub
 		return token;
 	}
 

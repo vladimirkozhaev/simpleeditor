@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jface.text.DocumentEvent;
+import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.jface.text.Position;
 import org.eclipse.jface.text.source.Annotation;
 import org.eclipse.jface.text.source.ISourceViewer;
@@ -15,19 +17,26 @@ import org.eclipse.jface.text.source.projection.ProjectionViewer;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.editors.text.TextEditor;
 
-public class MinimalEditor extends TextEditor {
+import com.idc.omega.xml.XMLNodeInfo;
+import com.idc.omega.xml.XMLParserVisitor;
+
+public class MinimalEditor extends TextEditor implements IDocumentListener {
 
 	/**
 	 * 
 	 */
+
+	XMLNodeInfo nodeInfo;
+
 	public MinimalEditor() {
 		super();
-		setSourceViewerConfiguration(new SimpleConfiguration(this));		
+		setSourceViewerConfiguration(new SimpleConfiguration(this,new ColorManager()));
+		setDocumentProvider(new JNLPDocumentProvider());
 	}
 
 	private ProjectionSupport projectionSupport;
 	private ProjectionAnnotationModel annotationModel;
-	private Annotation[] oldAnnotations=new Annotation[0];
+	private Annotation[] oldAnnotations = new Annotation[0];
 
 	@Override
 	public void createPartControl(Composite parent) {
@@ -42,14 +51,16 @@ public class MinimalEditor extends TextEditor {
 		viewer.doOperation(ProjectionViewer.TOGGLE);
 
 		annotationModel = viewer.getProjectionAnnotationModel();
+		viewer.getDocument().addDocumentListener(this);
 	}
+	
+	
 
 	@Override
 	protected ISourceViewer createSourceViewer(Composite parent, IVerticalRuler ruler, int styles) {
 		ISourceViewer viewer = new ProjectionViewer(parent, ruler, getOverviewRuler(), isOverviewRulerVisible(),
 				styles);
 
-		// ensure decoration support has been created and configured.
 		getSourceViewerDecorationSupport(viewer);
 
 		return viewer;
@@ -67,13 +78,30 @@ public class MinimalEditor extends TextEditor {
 
 			newAnnotations.put(annotation, positions.get(i));
 
-			annotations[i]=annotation;
+			annotations[i] = annotation;
 		}
 
 		annotationModel.replaceAnnotations(oldAnnotations, newAnnotations);
 
-
 		oldAnnotations = annotations;
+	}
+
+	@Override
+	public void documentAboutToBeChanged(DocumentEvent event) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void documentChanged(DocumentEvent event) {
+
+		nodeInfo = XMLParserVisitor.makeNodesInfo(event.fDocument.get());
+
+	}
+
+	public XMLNodeInfo getNodeInfo() {
+		// TODO Auto-generated method stub
+		return nodeInfo;
 	}
 
 }
